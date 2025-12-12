@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI바이브웹 커뮤니티">
+    <title>커뮤니티 - AI바이브웹</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo"><a href="index.html">AI바이브웹</a></h1>
+            <nav class="gnb">
+                <ul>
+                    <li><a href="index.html#intro">소개</a></li>
+                    <li><a href="index.html#curriculum">커리큘럼</a></li>
+                    <li><a href="index.html#tech-stack">기술스택</a></li>
+                    <li><a href="index.html#benefits">기대효과</a></li>
+                    <li><a href="community.html" class="active">커뮤니티</a></li>
+                    <li><a href="#" id="auth-btn" class="login-btn">로그인</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">커뮤니티</h2>
+
+                <!-- Login Required Message -->
+                <div id="login-required" class="login-required">
+                    <p>커뮤니티는 로그인 후 이용 가능합니다.</p>
+                    <a href="login.html" class="btn-primary">로그인하기</a>
+                </div>
+
+                <!-- Community Content (Hidden until logged in) -->
+                <div id="community-content" class="community-content" style="display: none;">
+                    <!-- Post Form -->
+                    <div class="post-form-container">
+                        <h3>새 글 작성</h3>
+                        <form id="post-form">
+                            <input type="text" id="post-title" placeholder="제목을 입력하세요" required>
+                            <textarea id="post-content" placeholder="내용을 입력하세요" rows="5" required></textarea>
+                            <button type="submit" class="btn-primary">작성하기</button>
+                        </form>
+                    </div>
+
+                    <!-- Posts List -->
+                    <div class="posts-container">
+                        <h3>게시글 목록</h3>
+                        <div id="posts-list" class="posts-list">
+                            <!-- Posts will be loaded here -->
+                            <div class="post-item">
+                                <h4 class="post-title">게시글 제목 예시</h4>
+                                <p class="post-content">게시글 내용이 여기에 표시됩니다.</p>
+                                <div class="post-meta">
+                                    <span class="post-author">작성자</span>
+                                    <span class="post-date">2024-12-09</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI바이브웹. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/community.js"></script>
+</body>
+</html>

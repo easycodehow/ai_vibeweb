@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI바이브웹 로그인">
+    <title>로그인 - AI바이브웹</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo"><a href="index.html">AI바이브웹</a></h1>
+            <nav class="gnb">
+                <ul>
+                    <li><a href="index.html#intro">소개</a></li>
+                    <li><a href="index.html#curriculum">커리큘럼</a></li>
+                    <li><a href="index.html#tech-stack">기술스택</a></li>
+                    <li><a href="index.html#benefits">기대효과</a></li>
+                    <li><a href="community.html">커뮤니티</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+                <div class="auth-container">
+                    <h2 class="section-title">로그인</h2>
+
+                    <!-- Login Form -->
+                    <div id="login-form-container" class="auth-form">
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="login-email">이메일</label>
+                                <input type="email" id="login-email" placeholder="이메일을 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">비밀번호</label>
+                                <input type="password" id="login-password" placeholder="비밀번호를 입력하세요" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">로그인</button>
+                        </form>
+                        <p class="auth-switch">
+                            계정이 없으신가요? <a href="#" id="show-signup">회원가입</a>
+                        </p>
+                    </div>
+
+                    <!-- Signup Form -->
+                    <div id="signup-form-container" class="auth-form" style="display: none;">
+                        <form id="signup-form">
+                            <div class="form-group">
+                                <label for="signup-email">이메일</label>
+                                <input type="email" id="signup-email" placeholder="이메일을 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-password">비밀번호</label>
+                                <input type="password" id="signup-password" placeholder="비밀번호를 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-password-confirm">비밀번호 확인</label>
+                                <input type="password" id="signup-password-confirm" placeholder="비밀번호를 다시 입력하세요" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">회원가입</button>
+                        </form>
+                        <p class="auth-switch">
+                            이미 계정이 있으신가요? <a href="#" id="show-login">로그인</a>
+                        </p>
+                    </div>
+
+                    <!-- Message Display -->
+                    <div id="auth-message" class="auth-message"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI바이브웹. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

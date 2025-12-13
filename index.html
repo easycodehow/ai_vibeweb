@@ -7,6 +7,8 @@
     <title>AI바이브웹</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="css/style.css">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Header -->
@@ -19,14 +21,26 @@
                     <li><a href="#curriculum">커리큘럼</a></li>
                     <li><a href="#tech-stack">기술스택</a></li>
                     <li><a href="#benefits">기대효과</a></li>
-                    <li><a href="community.html">커뮤니티</a></li>
-                    <li>
-                        <a href="login.html" class="login-btn" title="로그인">
+                    <li><a href="board.html">커뮤니티</a></li>
+                    <li id="auth-menu">
+                        <!-- 비로그인 상태 -->
+                        <a href="login.html" class="auth-link" id="auth-link-login">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </a>
+                        <!-- 로그인 상태 -->
+                        <div class="auth-user" id="auth-user" style="display: none;">
+                            <span class="user-email" id="user-email"></span>
+                            <a href="#" class="auth-link" id="auth-link-logout" onclick="logout(event)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </a>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -266,6 +280,7 @@
         </div>
     </footer>
 
+    <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

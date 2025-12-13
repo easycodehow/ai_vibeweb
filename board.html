@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI바이브웹 게시판">
+    <title>게시판 - AI바이브웹</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo"><a href="index.html">AI바이브웹</a></h1>
+            <nav class="gnb">
+                <ul>
+                    <li><a href="index.html#intro">소개</a></li>
+                    <li><a href="index.html#curriculum">커리큘럼</a></li>
+                    <li><a href="index.html#tech-stack">기술스택</a></li>
+                    <li><a href="index.html#benefits">기대효과</a></li>
+                    <li><a href="board.html" class="active">커뮤니티</a></li>
+                    <li id="auth-menu">
+                        <!-- 비로그인 상태 -->
+                        <a href="login.html" class="auth-link" id="auth-link-login">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </a>
+                        <!-- 로그인 상태 -->
+                        <div class="auth-user" id="auth-user" style="display: none;">
+                            <span class="user-email" id="user-email"></span>
+                            <a href="#" class="auth-link" id="auth-link-logout" onclick="logout(event)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">게시판</h2>
+
+                <!-- Board Content (항상 표시) -->
+                <div id="board-content" class="board-content">
+
+                    <!-- Board Header -->
+                    <div class="board-header">
+                        <div class="board-info">
+                            <p>전체 게시글 <strong id="total-posts">0</strong>개</p>
+                        </div>
+                        <div class="board-actions">
+                            <button type="button" class="btn-primary" id="write-btn">글쓰기</button>
+                        </div>
+                    </div>
+
+                    <!-- Board List Table -->
+                    <div class="board-table-container">
+                        <table class="board-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-no">번호</th>
+                                    <th class="col-title">제목</th>
+                                    <th class="col-author">작성자</th>
+                                    <th class="col-date">작성일</th>
+                                    <th class="col-views">조회</th>
+                                </tr>
+                            </thead>
+                            <tbody id="board-list">
+                                <!-- 게시글 목록이 여기에 동적으로 추가됩니다 -->
+                                <tr class="board-row">
+                                    <td class="col-no">3</td>
+                                    <td class="col-title">
+                                        <a href="board-detail.html?id=3">바이브코딩 시작하기</a>
+                                    </td>
+                                    <td class="col-author">user1@example.com</td>
+                                    <td class="col-date">2024-12-09</td>
+                                    <td class="col-views">15</td>
+                                </tr>
+                                <tr class="board-row">
+                                    <td class="col-no">2</td>
+                                    <td class="col-title">
+                                        <a href="board-detail.html?id=2">HTML5 학습 팁</a>
+                                    </td>
+                                    <td class="col-author">user2@example.com</td>
+                                    <td class="col-date">2024-12-08</td>
+                                    <td class="col-views">23</td>
+                                </tr>
+                                <tr class="board-row">
+                                    <td class="col-no">1</td>
+                                    <td class="col-title">
+                                        <a href="board-detail.html?id=1">JavaScript 질문</a>
+                                    </td>
+                                    <td class="col-author">user3@example.com</td>
+                                    <td class="col-date">2024-12-07</td>
+                                    <td class="col-views">42</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="board-pagination">
+                        <button class="page-btn" disabled>&lt;&lt;</button>
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">&gt;</button>
+                        <button class="page-btn">&gt;&gt;</button>
+                    </div>
+
+                    <!-- Empty State (게시글 없을 때) -->
+                    <div id="board-empty" class="board-empty" style="display: none;">
+                        <p>게시글이 없습니다.</p>
+                        <a href="board-write.html" class="btn-primary">첫 글 작성하기</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI바이브웹. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/board.js"></script>
+</body>
+</html>

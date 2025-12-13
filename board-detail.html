@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI바이브웹 게시판 - 글 상세보기">
+    <title>게시글 상세보기 - AI바이브웹</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo"><a href="index.html">AI바이브웹</a></h1>
+            <nav class="gnb">
+                <ul>
+                    <li><a href="index.html#intro">소개</a></li>
+                    <li><a href="index.html#curriculum">커리큘럼</a></li>
+                    <li><a href="index.html#tech-stack">기술스택</a></li>
+                    <li><a href="index.html#benefits">기대효과</a></li>
+                    <li><a href="board.html" class="active">커뮤니티</a></li>
+                    <li id="auth-menu">
+                        <!-- 비로그인 상태 -->
+                        <a href="login.html" class="auth-link" id="auth-link-login">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </a>
+                        <!-- 로그인 상태 -->
+                        <div class="auth-user" id="auth-user" style="display: none;">
+                            <span class="user-email" id="user-email"></span>
+                            <a href="#" class="auth-link" id="auth-link-logout" onclick="logout(event)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+
+                <!-- Post Detail Container -->
+                <div id="post-detail-container" class="post-detail-container">
+
+                    <!-- Post Header -->
+                    <div class="post-detail-header">
+                        <h2 class="post-detail-title">바이브코딩 시작하기</h2>
+                        <div class="post-detail-meta">
+                            <span class="post-author">작성자: user1@example.com</span>
+                            <span class="post-date">작성일: 2024-12-09 14:30</span>
+                            <span class="post-views">조회수: 15</span>
+                        </div>
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="post-detail-content">
+                        <p>여기에 게시글 내용이 표시됩니다.</p>
+                        <p>바이브코딩을 시작하려면 어떻게 해야 하나요?</p>
+                        <p>AI 도구를 활용한 개발 방법론에 대해 알아보고 싶습니다.</p>
+                    </div>
+
+                    <!-- Post Actions (작성자 본인이거나 관리자일 때만 표시) -->
+                    <div class="post-detail-actions">
+                        <div class="action-left">
+                            <a href="board.html" class="btn-secondary">목록으로</a>
+                        </div>
+                        <div class="action-right" id="author-actions" style="display: none;">
+                            <button type="button" class="btn-primary" id="edit-btn">수정</button>
+                            <button type="button" class="btn-danger" id="delete-btn">삭제</button>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h3 class="comments-title">댓글 <span id="comment-count">0</span></h3>
+
+                        <!-- Login Required for Comments (로그인 전) -->
+                        <div id="comment-login-required" class="comment-login-required" style="display: none;">
+                            <p>댓글은 로그인 후 작성할 수 있습니다.</p>
+                            <a href="login.html" class="btn-primary">로그인하기</a>
+                        </div>
+
+                        <!-- Comment Write Form (로그인 후) -->
+                        <div id="comment-write-form" class="comment-write-form" style="display: none;">
+                            <textarea
+                                id="comment-content"
+                                class="comment-textarea"
+                                rows="3"
+                                placeholder="댓글을 입력하세요"></textarea>
+                            <button type="button" class="btn-primary" id="comment-submit-btn">댓글 작성</button>
+                        </div>
+
+                        <!-- Comments List -->
+                        <div class="comments-list" id="comments-list">
+                            <!-- 댓글 목록이 여기에 동적으로 추가됩니다 -->
+                            <div class="comment-item">
+                                <div class="comment-header">
+                                    <span class="comment-author">user2@example.com</span>
+                                    <span class="comment-date">2024-12-09 15:20</span>
+                                </div>
+                                <div class="comment-content">
+                                    <p>좋은 질문이네요! 저도 궁금합니다.</p>
+                                </div>
+                                <div class="comment-actions" style="display: none;">
+                                    <button type="button" class="btn-text">수정</button>
+                                    <button type="button" class="btn-text">삭제</button>
+                                </div>
+                            </div>
+
+                            <div class="comment-item">
+                                <div class="comment-header">
+                                    <span class="comment-author">user3@example.com</span>
+                                    <span class="comment-date">2024-12-09 16:45</span>
+                                </div>
+                                <div class="comment-content">
+                                    <p>Claude Code를 사용해보시면 좋을 것 같아요!</p>
+                                </div>
+                                <div class="comment-actions" style="display: none;">
+                                    <button type="button" class="btn-text">수정</button>
+                                    <button type="button" class="btn-text">삭제</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty Comments -->
+                        <div id="comments-empty" class="comments-empty" style="display: none;">
+                            <p>첫 댓글을 작성해보세요!</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI바이브웹. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/board.js"></script>
+</body>
+</html>

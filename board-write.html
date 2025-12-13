@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI바이브웹 게시판 - 글쓰기">
+    <title>글쓰기 - AI바이브웹</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo"><a href="index.html">AI바이브웹</a></h1>
+            <nav class="gnb">
+                <ul>
+                    <li><a href="index.html#intro">소개</a></li>
+                    <li><a href="index.html#curriculum">커리큘럼</a></li>
+                    <li><a href="index.html#tech-stack">기술스택</a></li>
+                    <li><a href="index.html#benefits">기대효과</a></li>
+                    <li><a href="board.html" class="active">커뮤니티</a></li>
+                    <li id="auth-menu">
+                        <!-- 비로그인 상태 -->
+                        <a href="login.html" class="auth-link" id="auth-link-login">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </a>
+                        <!-- 로그인 상태 -->
+                        <div class="auth-user" id="auth-user" style="display: none;">
+                            <span class="user-email" id="user-email"></span>
+                            <a href="#" class="auth-link" id="auth-link-logout" onclick="logout(event)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">글쓰기</h2>
+
+                <!-- Write Form -->
+                <div id="write-form-container" class="write-form-container">
+
+                    <form id="board-write-form" class="board-write-form">
+
+                        <!-- 제목 입력 -->
+                        <div class="form-group">
+                            <label for="post-title">제목</label>
+                            <input
+                                type="text"
+                                id="post-title"
+                                name="title"
+                                class="form-input"
+                                placeholder="제목을 입력하세요 (최대 100자)"
+                                maxlength="100"
+                                required>
+                        </div>
+
+                        <!-- 내용 입력 -->
+                        <div class="form-group">
+                            <label for="post-content">내용</label>
+                            <textarea
+                                id="post-content"
+                                name="content"
+                                class="form-textarea"
+                                rows="15"
+                                placeholder="내용을 입력하세요"
+                                required></textarea>
+                        </div>
+
+                        <!-- 작성자 정보 (자동 표시) -->
+                        <div class="form-group">
+                            <label>작성자</label>
+                            <p id="post-author" class="form-text">로그인된 사용자 이메일</p>
+                        </div>
+
+                        <!-- 버튼 그룹 -->
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-primary">작성완료</button>
+                            <button type="button" class="btn-secondary" onclick="history.back()">취소</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI바이브웹. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/board.js"></script>
+</body>
+</html>

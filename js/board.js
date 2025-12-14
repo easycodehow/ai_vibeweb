@@ -4,6 +4,21 @@
 console.log('Board.js loaded successfully');
 
 // ========================================
+// 유틸리티 함수
+// ========================================
+
+/**
+ * 이메일에서 아이디만 추출
+ * @param {string} email - 이메일 주소
+ * @returns {string} - '@' 앞부분 아이디
+ */
+function extractUserId(email) {
+    if (!email) return '';
+    const atIndex = email.indexOf('@');
+    return atIndex > 0 ? email.substring(0, atIndex) : email;
+}
+
+// ========================================
 // 인증 체크
 // ========================================
 function checkBoardAuth() {
@@ -44,7 +59,14 @@ function requireLogin() {
 // 게시글 목록 로드
 function loadPosts() {
     // TODO: Supabase에서 게시글 목록 가져오기
+    // 작성자 이메일을 아이디로 변환: extractUserId(post.author_email)
     console.log('게시글 목록 로드');
+
+    // 예시:
+    // posts.forEach(post => {
+    //     const userId = extractUserId(post.author_email);
+    //     // userId를 화면에 표시
+    // });
 }
 
 
@@ -66,7 +88,12 @@ function createPost(title, content) {
 // 게시글 상세 로드
 function loadPostDetail(postId) {
     // TODO: Supabase에서 게시글 상세정보 가져오기
+    // 작성자 이메일을 아이디로 변환: extractUserId(post.author_email)
     console.log('게시글 상세 로드:', postId);
+
+    // 예시:
+    // const userId = extractUserId(post.author_email);
+    // document.querySelector('.post-author').textContent = `작성자: ${userId}`;
 }
 
 // 게시글 수정
@@ -90,7 +117,14 @@ function createComment(postId, content) {
 // 댓글 목록 로드
 function loadComments(postId) {
     // TODO: Supabase에서 댓글 목록 가져오기
+    // 댓글 작성자 이메일을 아이디로 변환: extractUserId(comment.author_email)
     console.log('댓글 목록 로드:', postId);
+
+    // 예시:
+    // comments.forEach(comment => {
+    //     const userId = extractUserId(comment.author_email);
+    //     // userId를 화면에 표시
+    // });
 }
 
 
@@ -137,11 +171,11 @@ document.addEventListener('DOMContentLoaded', function() {
             createPost(title, content);
         });
 
-        // 작성자 표시
+        // 작성자 표시 (아이디만)
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const authorEl = document.getElementById('post-author');
         if (authorEl && user.email) {
-            authorEl.textContent = user.email;
+            authorEl.textContent = extractUserId(user.email);
         }
     }
 

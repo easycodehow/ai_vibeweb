@@ -255,3 +255,33 @@ function initWavyBackground() {
 
 // Initialize wavy background on page load
 document.addEventListener('DOMContentLoaded', initWavyBackground);
+
+// Scroll to Top Button Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollToTopBtn = document.getElementById('scroll-to-top');
+
+    if (!scrollToTopBtn) return;
+
+    // Show/hide button based on scroll position
+    function toggleScrollButton() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    }
+
+    // Scroll to top when button is clicked
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events
+    window.addEventListener('scroll', toggleScrollButton);
+
+    // Initial check
+    toggleScrollButton();
+});

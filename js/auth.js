@@ -5,6 +5,21 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // Initialize Supabase client
 let supabase = null;
 
+// ========================================
+// 유틸리티 함수
+// ========================================
+
+/**
+ * 이메일에서 아이디만 추출
+ * @param {string} email - 이메일 주소
+ * @returns {string} - '@' 앞부분 아이디
+ */
+function extractUserId(email) {
+    if (!email) return '';
+    const atIndex = email.indexOf('@');
+    return atIndex > 0 ? email.substring(0, atIndex) : email;
+}
+
 // Supabase 초기화 함수
 function initSupabase() {
     if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
@@ -95,9 +110,8 @@ async function updateAuthUI() {
         if (authLinkLogin) authLinkLogin.style.display = 'none';
         if (authUser) authUser.style.display = 'flex';
         if (userEmail) {
-            // 이메일에서 @ 앞부분(아이디)만 추출
-            const userId = user.email.split('@')[0];
-            userEmail.textContent = userId;
+            // 이메일에서 아이디만 추출하여 표시
+            userEmail.textContent = extractUserId(user.email);
         }
     } else {
         // 비로그인 상태

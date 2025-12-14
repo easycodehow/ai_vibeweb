@@ -59,7 +59,7 @@
                     <div class="post-detail-header">
                         <h2 class="post-detail-title">바이브코딩 시작하기</h2>
                         <div class="post-detail-meta">
-                            <span class="post-author">작성자: user1@example.com</span>
+                            <span class="post-author">작성자: 테스트1</span>
                             <span class="post-date">작성일: 2024-12-09 14:30</span>
                             <span class="post-views">조회수: 15</span>
                         </div>
@@ -95,12 +95,51 @@
 
                         <!-- Comment Write Form (로그인 후) -->
                         <div id="comment-write-form" class="comment-write-form" style="display: none;">
-                            <textarea
-                                id="comment-content"
-                                class="comment-textarea"
-                                rows="3"
-                                placeholder="댓글을 입력하세요"></textarea>
-                            <button type="button" class="btn-primary" id="comment-submit-btn">댓글 작성</button>
+                            <div class="comment-input-box">
+                                <textarea
+                                    id="comment-content"
+                                    class="comment-textarea"
+                                    rows="3"
+                                    placeholder="답글..."></textarea>
+                                <div class="comment-input-footer">
+                                    <div class="comment-actions-left">
+                                        <button type="button" class="icon-btn" title="첨부파일">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="icon-btn" title="랜덤">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="16 3 21 3 21 8"></polyline>
+                                                <line x1="4" y1="20" x2="21" y2="3"></line>
+                                                <polyline points="21 16 21 21 16 21"></polyline>
+                                                <line x1="15" y1="15" x2="21" y2="21"></line>
+                                                <line x1="4" y1="4" x2="9" y2="9"></line>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="icon-btn" title="히스토리">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="comment-actions-right">
+                                        <select class="model-select">
+                                            <option value="sonnet-4.5">Sonnet 4.5</option>
+                                            <option value="opus-4">Opus 4</option>
+                                            <option value="haiku-3.5">Haiku 3.5</option>
+                                        </select>
+                                        <button type="button" class="submit-btn" id="comment-submit-btn">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-disclaimer">Claude는 AI이며 실수를 수 있습니다. 중요한 다시 한번 확인해 주세요.</p>
                         </div>
 
                         <!-- Comments List -->
@@ -108,7 +147,7 @@
                             <!-- 댓글 목록이 여기에 동적으로 추가됩니다 -->
                             <div class="comment-item">
                                 <div class="comment-header">
-                                    <span class="comment-author">user2@example.com</span>
+                                    <span class="comment-author">테스트2</span>
                                     <span class="comment-date">2024-12-09 15:20</span>
                                 </div>
                                 <div class="comment-content">
@@ -122,7 +161,7 @@
 
                             <div class="comment-item">
                                 <div class="comment-header">
-                                    <span class="comment-author">user3@example.com</span>
+                                    <span class="comment-author">테스트3</span>
                                     <span class="comment-date">2024-12-09 16:45</span>
                                 </div>
                                 <div class="comment-content">

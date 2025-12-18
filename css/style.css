@@ -32,6 +32,9 @@ body {
     background-color: #F5F3EF;
     font-size: 18px;
     font-weight: 400;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -240,7 +243,7 @@ h4 {
 /* Main Content */
 .main-content {
     margin-top: 0;
-    min-height: calc(100vh - 200px);
+    flex: 1;
 }
 
 /* Hero Section */
@@ -719,7 +722,6 @@ h4 {
     color: white;
     text-align: center;
     padding: 2rem;
-    margin-top: 2rem;
 }
 
 /* Scroll to Top Button */
@@ -1527,7 +1529,7 @@ h4 {
    ======================================== */
 
 .post-detail-container {
-    background-color: #ffffff;
+    background-color: #f7fafc;
     border-radius: 8px;
     border: 2px solid #e2e8f0;
     overflow: hidden;
@@ -1565,6 +1567,7 @@ h4 {
     font-size: 18px;
     line-height: 1.8;
     color: #333333;
+    background-color: #ffffff;
 }
 
 .post-detail-content p {
@@ -1573,11 +1576,14 @@ h4 {
 
 .post-detail-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2rem;
     border-top: 1px solid #e2e8f0;
     background-color: #f7fafc;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
 }
 
 .action-left,
@@ -1607,7 +1613,8 @@ h4 {
 
 .comments-section {
     padding: 2rem;
-    border-top: 2px solid #e2e8f0;
+    border-top: none;
+    background-color: #f7fafc;
 }
 
 .comments-title {

@@ -78,7 +78,7 @@ function requireLogin() {
 // ========================================
 
 // 게시글 목록 로드
-async function loadPosts() {
+async function loadPosts(searchType = null, searchKeyword = null) {
     const supabaseClient = getSupabaseClient();
     if (!supabaseClient) {
         console.error('Supabase not initialized');
@@ -86,14 +86,31 @@ async function loadPosts() {
     }
 
     try {
-        // Supabase에서 게시글 목록과 댓글 수 함께 가져오기 (최신순)
-        const { data: posts, error } = await supabaseClient
+        // Supabase 쿼리 빌더 시작
+        let query = supabaseClient
             .from('posts')
             .select(`
                 *,
                 comments(id)
-            `)
-            .order('created_at', { ascending: false });
+            `);
+
+        // 검색 조건 추가
+        if (searchKeyword && searchKeyword.trim()) {
+            const keyword = searchKeyword.trim();
+
+            if (searchType === 'title') {
+                query = query.ilike('title', `%${keyword}%`);
+            } else if (searchType === 'content') {
+                query = query.ilike('content', `%${keyword}%`);
+            } else if (searchType === 'author') {
+                query = query.or(`author_name.ilike.%${keyword}%,author_email.ilike.%${keyword}%`);
+            }
+        }
+
+        // 정렬 추가
+        query = query.order('created_at', { ascending: false });
+
+        const { data: posts, error } = await query;
 
         if (error) {
             console.error('Error loading posts:', error);
@@ -259,17 +276,22 @@ async function loadPostDetail(postId) {
             return;
         }
 
-        // 조회수 증가
-        await supabaseClient
+        // 조회수 증가 후 업데이트된 값 가져오기
+        const { data: updatedPost } = await supabaseClient
             .from('posts')
             .update({ views: (post.views || 0) + 1 })
-            .eq('id', postId);
+            .eq('id', postId)
+            .select()
+            .single();
+
+        // 업데이트된 조회수 사용
+        const currentViews = updatedPost ? updatedPost.views : (post.views || 0) + 1;
 
         // 게시글 내용 표시
         document.querySelector('.post-detail-title').textContent = post.title;
         document.querySelector('.post-author').textContent = `작성자: ${extractUserId(post.author_email)}`;
         document.querySelector('.post-date').textContent = `작성일: ${formatDate(post.created_at)}`;
-        document.querySelector('.post-views').textContent = `조회수: ${(post.views || 0) + 1}`;
+        document.querySelector('.post-views').textContent = `조회수: ${currentViews}`;
         document.querySelector('.post-detail-content').innerHTML = `<p>${post.content.replace(/\n/g, '<br>')}</p>`;
 
         // 작성자 본인이면 수정/삭제 버튼 표시
@@ -521,6 +543,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 게시글 목록 로드 (board.html에서만)
         loadPosts();
+
+        // 검색 버튼 클릭 이벤트
+        const searchBtn = document.getElementById('search-btn');
+        const searchKeywordInput = document.getElementById('search-keyword');
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                const searchType = document.getElementById('search-type').value;
+                const searchKeyword = searchKeywordInput.value;
+                loadPosts(searchType, searchKeyword);
+            });
+        }
+
+        // 검색어 입력 후 Enter 키 이벤트
+        if (searchKeywordInput) {
+            searchKeywordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchType = document.getElementById('search-type').value;
+                    const searchKeyword = searchKeywordInput.value;
+                    loadPosts(searchType, searchKeyword);
+                }
+            });
+        }
     }
 
 

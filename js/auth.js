@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://vbieajevljjwqfgdtfhj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiaWVhamV2bGpqd3FmZ2R0ZmhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MTgwNjksImV4cCI6MjA4MTE5NDA2OX0.coBrXxDf8JzrEj7MlrTxJkhoSdKMH10f9nDm9U1Ctxg';
 
 // Initialize Supabase client
-let supabase = null;
+let supabaseClient = null;
 
 // ========================================
 // 유틸리티 함수
@@ -28,9 +28,11 @@ function initSupabase() {
             return false;
         }
         try {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            // 다른 파일에서도 사용할 수 있도록 전역으로 설정
+            window.supabaseClient = supabaseClient;
             console.log('Supabase initialized successfully');
-            console.log('Supabase client:', supabase);
+            console.log('Supabase client:', supabaseClient);
             return true;
         } catch (error) {
             console.error('Failed to initialize Supabase:', error);
@@ -45,9 +47,9 @@ function initSupabase() {
 // Check if user is logged in
 async function checkAuth() {
     // Supabase 세션 확인
-    if (supabase) {
+    if (supabaseClient) {
         try {
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
 
             if (error) {
                 console.error('Error getting session:', error);
@@ -125,8 +127,8 @@ async function updateAuthUI() {
 async function login(email, password, rememberMe = true) {
     try {
         // Supabase가 설정되어 있으면 실제 로그인
-        if (supabase) {
-            const { data, error } = await supabase.auth.signInWithPassword({
+        if (supabaseClient) {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password
             });
@@ -205,9 +207,13 @@ async function login(email, password, rememberMe = true) {
 // Signup function
 async function signup(email, password) {
     try {
+        console.log('회원가입 시도:', email);
+
         // Supabase가 설정되어 있으면 실제 회원가입
-        if (supabase) {
-            const { data, error } = await supabase.auth.signUp({
+        if (supabaseClient) {
+            console.log('Supabase를 통한 회원가입 진행 중...');
+
+            const { data, error } = await supabaseClient.auth.signUp({
                 email: email,
                 password: password,
                 options: {
@@ -215,14 +221,54 @@ async function signup(email, password) {
                 }
             });
 
+            console.log('Supabase 응답:', { data, error });
+
             if (error) {
                 console.error('Signup error:', error);
-                showMessage('회원가입 실패: ' + error.message, 'error');
+
+                // 에러 메시지 한글화
+                let errorMessage = '회원가입 실패';
+                if (error.message.includes('User already registered')) {
+                    errorMessage = '이미 가입된 이메일입니다.';
+                } else if (error.message.includes('Password should be')) {
+                    errorMessage = '비밀번호는 최소 6자 이상이어야 합니다.';
+                } else if (error.message.includes('Unable to validate email')) {
+                    errorMessage = '유효하지 않은 이메일 형식입니다.';
+                } else {
+                    errorMessage = '회원가입 실패: ' + error.message;
+                }
+
+                showMessage(errorMessage, 'error');
                 return { success: false, error };
             }
 
+            // 회원가입 성공 처리
             console.log('Signup successful:', data);
-            showMessage('회원가입 성공! 이메일을 확인해주세요.', 'success');
+
+            // 이메일 인증이 필요한 경우
+            if (data.user && !data.user.confirmed_at) {
+                showMessage('회원가입 성공! 이메일 인증 링크를 확인해주세요.', 'success');
+            } else if (data.user && data.session) {
+                // 즉시 로그인 가능한 경우 (이메일 인증 비활성화 상태)
+                showMessage('회원가입 성공! 자동으로 로그인됩니다.', 'success');
+
+                // 사용자 정보 저장
+                const user = {
+                    id: data.user.id,
+                    email: data.user.email,
+                    created_at: data.user.created_at
+                };
+                localStorage.setItem('user', JSON.stringify(user));
+
+                // 커뮤니티 페이지로 이동
+                setTimeout(() => {
+                    window.location.href = 'board.html';
+                }, 1000);
+
+                return { success: true, data };
+            } else {
+                showMessage('회원가입 성공! 이메일을 확인해주세요.', 'success');
+            }
 
             // 1.5초 후 로그인 폼으로 전환
             setTimeout(() => {
@@ -254,8 +300,8 @@ async function logout(e) {
 
     try {
         // Supabase가 설정되어 있으면 실제 로그아웃
-        if (supabase) {
-            const { error } = await supabase.auth.signOut();
+        if (supabaseClient) {
+            const { error } = await supabaseClient.auth.signOut();
 
             if (error) {
                 console.error('Logout error:', error);
@@ -331,8 +377,8 @@ function showResetPasswordForm() {
 async function resetPassword(email) {
     try {
         // Supabase가 설정되어 있으면 실제 비밀번호 재설정
-        if (supabase) {
-            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        if (supabaseClient) {
+            const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
                 redirectTo: window.location.origin + '/reset-password.html'
             });
 
